@@ -4,20 +4,34 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 public class DBConnect {
-	
+
+	private static HikariDataSource ds = null;
+
 	public static Connection getConnection() {
-	
-		String jdbcURL = "jdbc:mysql://localhost/dizionario?user=root&password=root" ;
+
+		String jdbcURL = "jdbc:mysql://localhost/dizionario";
 		try {
-			Connection conn = DriverManager.getConnection(jdbcURL) ;
-			return conn ;
+
+			if (ds == null) {
+				ds = new HikariDataSource();
+
+				ds.setJdbcUrl(jdbcURL);
+				ds.setUsername("root");
+				ds.setPassword("root");
+			}
 			
+			Connection conn = ds.getConnection() ;
+
+			return conn;
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null ;
+		return null;
 	}
 
 }
